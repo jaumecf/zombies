@@ -384,6 +384,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Zombie
       objectReference: {fileID: 0}
+    - target: {fileID: 8014705921117630462, guid: bcf3e3174a78b004fbd0b17e5c8c1bd7,
+        type: 3}
+      propertyPath: m_Height
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 8014705921117630462, guid: bcf3e3174a78b004fbd0b17e5c8c1bd7,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8014705921117630462, guid: bcf3e3174a78b004fbd0b17e5c8c1bd7,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 3.3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bcf3e3174a78b004fbd0b17e5c8c1bd7, type: 3}
 --- !u!1001 &8959781377621388551
@@ -455,3 +470,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8e3c33e0f58d02043ad100a4a496d2b2, type: 3}
+--- !u!1 &8959781377621388552 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1693684005183822789, guid: 8e3c33e0f58d02043ad100a4a496d2b2,
+    type: 3}
+  m_PrefabInstance: {fileID: 8959781377621388551}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8959781377621388553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8959781377621388552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4f2e4e732aa57d4899befc5aeb14c7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100

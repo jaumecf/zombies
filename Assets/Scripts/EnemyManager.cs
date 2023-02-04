@@ -10,6 +10,9 @@ public class EnemyManager : MonoBehaviour
 
     // Variable per a l'animator del Zombie
     public Animator enemyAnimator;
+
+    // Variable per emmagatzemar el mal que fa el Zombie
+    public float damage = 20f;
     void Start()
     {
         // Aquest cop, no arrossegarem la variable GameObject del FPS
@@ -44,7 +47,9 @@ public class EnemyManager : MonoBehaviour
     {
         if(collision.gameObject == player)
         {
-            Debug.Log("L'enemic m'ataca!!");
+            //Debug.Log("L'enemic m'ataca!!");
+            player.GetComponent<PlayerManager>().hit(damage);
+
         }
     }
 }
