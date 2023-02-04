@@ -110,7 +110,7 @@ Animator:
   m_GameObject: {fileID: 1123639318117715266}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4827795524437f14ebf05d07c238e239, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -177,6 +177,7 @@ GameObject:
   - component: {fileID: 1726083203076401671}
   - component: {fileID: 1693684005183822787}
   - component: {fileID: 1693684005183822788}
+  - component: {fileID: 8959781377621388553}
   m_Layer: 0
   m_Name: First_Person_Player
   m_TagString: Player
@@ -241,6 +242,19 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   jumpHeight: 2
+--- !u!114 &8959781377621388553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1693684005183822789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4f2e4e732aa57d4899befc5aeb14c7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
 --- !u!1 &1871873809781425403
 GameObject:
   m_ObjectHideFlags: 0
@@ -1440,3 +1454,25 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7275077981540130359}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7133692889458370248 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 435075660291143935, guid: 6ffe500a9db1a1f4198b80b46bc35bc6,
+    type: 3}
+  m_PrefabInstance: {fileID: 7275077981540130359}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1313522233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7133692889458370248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4269c3e2eb186d74292b71f020a9dbee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCam: {fileID: 8959781377167057540}
+  range: 100
+  damage: 25
+  playerAnimator: {fileID: 6722115107672164898}
