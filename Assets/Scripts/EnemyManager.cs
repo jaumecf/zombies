@@ -16,6 +16,9 @@ public class EnemyManager : MonoBehaviour
 
     // Salut de l'enemic
     public float health = 100f;
+
+    // Variable per a poder-nos comunicar amb el GM
+    public GameManager gameManager;
     void Start()
     {
         // Aquest cop, no arrossegarem la variable GameObject del FPS
@@ -65,6 +68,9 @@ public class EnemyManager : MonoBehaviour
             // feim referència a ell amb la variable gameObject, que fa referència al GO
             // que conté el componentn EnemyManager
             Destroy(gameObject);
+
+            //TODO : decrementar comptador enemiesAlive
+            gameManager.enemiesAlive--;
         }
     }
 }
