@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,6 +12,14 @@ public class GameManager : MonoBehaviour
     public GameObject[] spawnPoints;
     public GameObject enemyPrefab;
 
+    // Referència al textMeshPro de rondes
+    public TextMeshProUGUI roundText;
+
+    // Referència al textMeshPro de rondes completades
+    public TextMeshProUGUI roundsSurvivedText;
+
+    // Referència al Panell
+    public GameObject gameOverPanel;
     void Start()
     {
         
@@ -23,6 +33,7 @@ public class GameManager : MonoBehaviour
             // Ronda nova
             round++;
             NextWave(round);
+            roundText.text = $"Ronda: {round}";
         }
     }
 
@@ -36,5 +47,28 @@ public class GameManager : MonoBehaviour
             enemyInstance.GetComponent<EnemyManager>().gameManager = GetComponent<GameManager>();
             enemiesAlive++;
         }
+    }
+
+    public void GameOver()
+    {
+        // Activar el panell
+        gameOverPanel.SetActive(true);
+
+        // Aturar el temps
+        Time.timeScale = 0;
+
+        // Cursor visible
+        Cursor.lockState = CursorLockMode.None;
+
+        // Mostrar nº rondes
+        roundsSurvivedText.text = round.ToString();
+    }
+
+    public void RestartGame()
+    {
+        // Recordau que carregam l'escena amb index 0, que es troba a File > Build Settings
+        SceneManager.LoadScene(0);
+        //Retornar l'escala de temps al valor original
+        Time.timeScale = 1;
     }
 }
