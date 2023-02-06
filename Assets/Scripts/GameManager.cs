@@ -67,8 +67,15 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         // Recordau que carregam l'escena amb index 0, que es troba a File > Build Settings
-        SceneManager.LoadScene(0);
+        // Després el modificam per 1
+        SceneManager.LoadScene(1);
         //Retornar l'escala de temps al valor original
+        Time.timeScale = 1;
+    }
+
+    public void BackMainMenu()
+    {
+        SceneManager.LoadScene(0);
         Time.timeScale = 1;
     }
 }
