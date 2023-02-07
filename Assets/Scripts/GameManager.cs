@@ -91,13 +91,13 @@ public class GameManager : MonoBehaviour
 
     public void Pause()
     {
-        // No volem que es pugui activar des del menu de Game Over
-        if(gameOverPanel.activeSelf != true)
+        if (gameOverPanel.activeSelf != true)
         {
             pausePanel.SetActive(true);
             Time.timeScale = 0;
             Cursor.lockState = CursorLockMode.None;
         }
+
     }
 
     public void Resume()

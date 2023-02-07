@@ -23,6 +23,11 @@ public class EnemyManager : MonoBehaviour
 
     // Slider per controlar la vida del Zombie
     public Slider healthBar;
+
+    public bool playerInReach;
+    public float attackDelayTimer;
+    public float howMuchEarlierStartAttackAnimation;
+    public float delayBetweenAttacks;
     void Start()
     {
         // Aquest cop, no arrossegarem la variable GameObject del FPS
@@ -63,8 +68,35 @@ public class EnemyManager : MonoBehaviour
         if(collision.gameObject == player)
         {
             //Debug.Log("L'enemic m'ataca!!");
-            player.GetComponent<PlayerManager>().hit(damage);
+            //player.GetComponent<PlayerManager>().hit(damage);
+            playerInReach = true;
 
+        }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (playerInReach)
+        {
+            attackDelayTimer += Time.deltaTime;
+            if(attackDelayTimer >= delayBetweenAttacks - howMuchEarlierStartAttackAnimation && attackDelayTimer <= delayBetweenAttacks)
+            {
+                enemyAnimator.SetTrigger("isAttacking");
+            }
+            if(attackDelayTimer >= delayBetweenAttacks)
+            {
+                player.GetComponent<PlayerManager>().hit(damage);
+                attackDelayTimer = 0;
+            }
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject == player)
+        {
+            playerInReach = false;
+            attackDelayTimer = 0;
         }
     }
 
@@ -74,13 +106,23 @@ public class EnemyManager : MonoBehaviour
         healthBar.value = health;
         if(health <= 0)
         {
+            // Animarem el zombie
+            enemyAnimator.SetTrigger("isDead");
+
             // Destrium a l'enemic quan la seva salut arriba a zero
             // feim referència a ell amb la variable gameObject, que fa referència al GO
             // que conté el componentn EnemyManager
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            Destroy(gameObject,10f);
+            Destroy(GetComponent<NavMeshAgent>());
+            Destroy(GetComponent<EnemyManager>());
+            Destroy(GetComponent<CapsuleCollider>());
+
 
             //TODO : decrementar comptador enemiesAlive
             gameManager.enemiesAlive--;
+
+            
         }
     }
 }
