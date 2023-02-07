@@ -24,10 +24,15 @@ public class EnemyManager : MonoBehaviour
     // Slider per controlar la vida del Zombie
     public Slider healthBar;
 
+    // Animacio i millora del xoc
     public bool playerInReach;
     public float attackDelayTimer;
     public float howMuchEarlierStartAttackAnimation;
     public float delayBetweenAttacks;
+
+    // So
+    public AudioSource enemyAudioSource;
+    public AudioClip[] growlAudioClips;
     void Start()
     {
         // Aquest cop, no arrossegarem la variable GameObject del FPS
@@ -36,6 +41,7 @@ public class EnemyManager : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         healthBar.maxValue = health;
         healthBar.value = health;
+        enemyAudioSource = GetComponent<AudioSource>();
     }
 
     
@@ -58,6 +64,11 @@ public class EnemyManager : MonoBehaviour
             enemyAnimator.SetBool("isRunning", false);
         }
 
+        if (!enemyAudioSource.isPlaying)
+        {
+            enemyAudioSource.clip = growlAudioClips[Random.Range(0, growlAudioClips.Length)];
+            enemyAudioSource.Play();
+        }
         
 
     }
