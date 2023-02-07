@@ -18,8 +18,11 @@ public class GameManager : MonoBehaviour
     // Referència al textMeshPro de rondes completades
     public TextMeshProUGUI roundsSurvivedText;
 
-    // Referència al Panell
+    // Referència al Panell de Game Over
     public GameObject gameOverPanel;
+
+    // Referència al Panell de Pausa
+    public GameObject pausePanel;
     void Start()
     {
         
@@ -34,6 +37,11 @@ public class GameManager : MonoBehaviour
             round++;
             NextWave(round);
             roundText.text = $"Ronda: {round}";
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Pause();
         }
     }
 
@@ -77,5 +85,23 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(0);
         Time.timeScale = 1;
+    }
+
+    public void Pause()
+    {
+        // No volem que es pugui activar des del menu de Game Over
+        if(gameOverPanel.activeSelf != true)
+        {
+            pausePanel.SetActive(true);
+            Time.timeScale = 0;
+            Cursor.lockState = CursorLockMode.None;
+        }
+    }
+
+    public void Resume()
+    {
+        pausePanel.SetActive(false);
+        Time.timeScale = 1;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 }
