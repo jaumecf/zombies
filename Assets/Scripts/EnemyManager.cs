@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class EnemyManager : MonoBehaviour
 {
@@ -19,12 +20,17 @@ public class EnemyManager : MonoBehaviour
 
     // Variable per a poder-nos comunicar amb el GM
     public GameManager gameManager;
+
+    // Slider per controlar la vida del Zombie
+    public Slider healthBar;
     void Start()
     {
         // Aquest cop, no arrossegarem la variable GameObject del FPS
         // des de l'inspector, sinò que l'assginarem des del codi
         // En concret volem cercar al jugador principal!!
         player = GameObject.FindGameObjectWithTag("Player");
+        healthBar.maxValue = health;
+        healthBar.value = health;
     }
 
     
@@ -33,6 +39,9 @@ public class EnemyManager : MonoBehaviour
         // Accedim al component NavMeshComponent, el qual té un element que es destination de tipus Vector3
         // Li podem assignar la posició del jugador, que el tenim a la variable player gràcies al seu tranform
         GetComponent<NavMeshAgent>().destination = player.transform.position;
+
+        // D'aquesta forma ens asseguram que malgrat el Zombie estigues de costat, veurem de front la barra de vida
+        healthBar.transform.LookAt(player.transform);
 
         // En primer lloc hem d'accedir a la velocitat del Zombiem, des del component NavMeshAgent
         if (GetComponent<NavMeshAgent>().velocity.magnitude > 1)
@@ -62,6 +71,7 @@ public class EnemyManager : MonoBehaviour
     public void Hit(float damage)
     {
         health -= damage;
+        healthBar.value = health;
         if(health <= 0)
         {
             // Destrium a l'enemic quan la seva salut arriba a zero

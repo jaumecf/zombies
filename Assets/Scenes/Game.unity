@@ -786,7 +786,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Round Survived:
+  m_text: 'Rounds Survived:
 
 '
   m_isRightToLeft: 0
@@ -1000,6 +1000,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 809366277}
   m_CullTransparentMesh: 1
+--- !u!1 &855819532 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8959781377167057540, guid: 8e3c33e0f58d02043ad100a4a496d2b2,
+    type: 3}
+  m_PrefabInstance: {fileID: 8959781377621388551}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &862618497
 GameObject:
   m_ObjectHideFlags: 0
@@ -1920,6 +1926,95 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1500782313}
   m_CullTransparentMesh: 1
+--- !u!1 &1519610171
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1519610172}
+  - component: {fileID: 1519610175}
+  - component: {fileID: 1519610174}
+  - component: {fileID: 1519610173}
+  m_Layer: 5
+  m_Name: Hit Panel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1519610172
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1519610171}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2020569316}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &1519610173
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1519610171}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &1519610174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1519610171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.6792453, g: 0, b: 0, a: 0.392}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1519610175
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1519610171}
+  m_CullTransparentMesh: 1
 --- !u!1 &1620618661
 GameObject:
   m_ObjectHideFlags: 0
@@ -2778,6 +2873,7 @@ RectTransform:
   - {fileID: 477716435}
   - {fileID: 1974662966}
   - {fileID: 1787940250}
+  - {fileID: 1519610172}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2924,6 +3020,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8959781377621388553, guid: 8e3c33e0f58d02043ad100a4a496d2b2,
         type: 3}
+      propertyPath: hitPanel
+      value: 
+      objectReference: {fileID: 1519610173}
+    - target: {fileID: 8959781377621388553, guid: 8e3c33e0f58d02043ad100a4a496d2b2,
+        type: 3}
       propertyPath: healthText
       value: 
       objectReference: {fileID: 477716436}
@@ -2932,5 +3033,10 @@ PrefabInstance:
       propertyPath: gameManager
       value: 
       objectReference: {fileID: 862618498}
+    - target: {fileID: 8959781377621388553, guid: 8e3c33e0f58d02043ad100a4a496d2b2,
+        type: 3}
+      propertyPath: playerCamera
+      value: 
+      objectReference: {fileID: 855819532}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8e3c33e0f58d02043ad100a4a496d2b2, type: 3}

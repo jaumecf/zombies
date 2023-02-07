@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
 
     // Referència al Panell de Game Over
     public GameObject gameOverPanel;
+    private int roundsSurvided;
 
     // Referència al Panell de Pausa
     public GameObject pausePanel;
@@ -69,7 +70,8 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
 
         // Mostrar nº rondes
-        roundsSurvivedText.text = round.ToString();
+        roundsSurvided = round - 1;
+        roundsSurvivedText.text = roundsSurvided.ToString();
     }
 
     public void RestartGame()
