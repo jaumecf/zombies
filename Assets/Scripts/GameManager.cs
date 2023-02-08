@@ -24,6 +24,9 @@ public class GameManager : MonoBehaviour
 
     // Referència al Panell de Pausa
     public GameObject pausePanel;
+
+    // Referència al Panell de Fade In Out
+    public Animator fadePanelAnimator;
     void Start()
     {
         
@@ -85,9 +88,18 @@ public class GameManager : MonoBehaviour
 
     public void BackMainMenu()
     {
-        SceneManager.LoadScene(0);
         Time.timeScale = 1;
         AudioListener.volume = 1;
+        fadePanelAnimator.SetTrigger("fadeIn");
+        // Per a que doni temps a veure l'animació, canviarem d'escena amb una mica de delay
+        Invoke("LoadMainMenuScene", 0.5f);
+        //SceneManager.LoadScene(0);
+    }
+
+    public void LoadMainMenuScene()
+    {
+
+        SceneManager.LoadScene(0);
     }
 
     public void Pause()
