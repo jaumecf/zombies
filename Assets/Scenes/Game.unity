@@ -1081,6 +1081,7 @@ MonoBehaviour:
   gameOverPanel: {fileID: 1974662963}
   pausePanel: {fileID: 1787940247}
   fadePanelAnimator: {fileID: 1039377140}
+  weaponManager: {fileID: 1908688517}
 --- !u!4 &862618499
 Transform:
   m_ObjectHideFlags: 0
@@ -2773,6 +2774,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1908688517 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1313522233, guid: 8e3c33e0f58d02043ad100a4a496d2b2,
+    type: 3}
+  m_PrefabInstance: {fileID: 8959781377621388551}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1908688512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4269c3e2eb186d74292b71f020a9dbee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1951825492
 GameObject:
   m_ObjectHideFlags: 0
