@@ -6,7 +6,10 @@ public class PlayerMovement : MonoBehaviour
 {
     // Variable de Character Controller per al moviment horitzontal i vertical
     public CharacterController controller;
-    public float speed = 12f;
+    //public float speed = 12f;
+    public float speed;
+    public float walkSpeed = 5f;
+    public float runSpeed = 10f;
 
     // Definició de variables per a la gravetat
     private Vector3 velocity;
@@ -52,6 +55,16 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2 * gravity);
+        }
+
+        // Veure si està esprinant o caminant
+        if (Input.GetButton("Fire3") && isGrounded)
+        {
+            speed = runSpeed;
+        }
+        else
+        {
+            speed = walkSpeed;
         }
     }
 }

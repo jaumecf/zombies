@@ -27,6 +27,10 @@ public class GameManager : MonoBehaviour
 
     // Referència al Panell de Fade In Out
     public Animator fadePanelAnimator;
+
+    // Referència per activar-lo i desactivar-lo pels menus
+    public WeaponManager weaponManager;
+
     void Start()
     {
         
@@ -75,6 +79,8 @@ public class GameManager : MonoBehaviour
         // Mostrar nº rondes
         roundsSurvided = round - 1;
         roundsSurvivedText.text = roundsSurvided.ToString();
+
+        weaponManager.enabled = false;
     }
 
     public void RestartGame()
@@ -104,6 +110,7 @@ public class GameManager : MonoBehaviour
 
     public void Pause()
     {
+        weaponManager.enabled = false;
         if (gameOverPanel.activeSelf != true)
         {
             pausePanel.SetActive(true);
@@ -120,5 +127,6 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         Cursor.lockState = CursorLockMode.Locked;
         AudioListener.volume = 1;
+        weaponManager.enabled = true;
     }
 }

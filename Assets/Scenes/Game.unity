@@ -3299,6 +3299,11 @@ PrefabInstance:
       propertyPath: flashParticleSystem
       value: 
       objectReference: {fileID: 445563771}
+    - target: {fileID: 1693684005183822788, guid: 8e3c33e0f58d02043ad100a4a496d2b2,
+        type: 3}
+      propertyPath: runSpeed
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 1693684005183822789, guid: 8e3c33e0f58d02043ad100a4a496d2b2,
         type: 3}
       propertyPath: m_Name
