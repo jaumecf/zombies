@@ -28,12 +28,29 @@ public class GameManager : MonoBehaviour
     // Referència al Panell de Fade In Out
     public Animator fadePanelAnimator;
 
-    // Referència per activar-lo i desactivar-lo pels menus
-    public WeaponManager weaponManager;
+    // referències per siubstituir la refèrencia al weapon manager
+    public bool isPaused;
+    public bool isGameOver;
+
+    public static GameManager sharedInstance;
+
+    private void Awake()
+    {
+        if(sharedInstance == null)
+        {
+            sharedInstance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Start()
     {
-        
+        isPaused = false;
+        isGameOver = false;
+        Time.timeScale = 1;
     }
 
     // Update is called once per frame
@@ -79,8 +96,9 @@ public class GameManager : MonoBehaviour
         // Mostrar nº rondes
         roundsSurvided = round - 1;
         roundsSurvivedText.text = roundsSurvided.ToString();
+        isGameOver = true;
 
-        weaponManager.enabled = false;
+        
     }
 
     public void RestartGame()
@@ -110,7 +128,8 @@ public class GameManager : MonoBehaviour
 
     public void Pause()
     {
-        weaponManager.enabled = false;
+        isPaused = true;
+        
         if (gameOverPanel.activeSelf != true)
         {
             pausePanel.SetActive(true);
@@ -127,6 +146,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         Cursor.lockState = CursorLockMode.Locked;
         AudioListener.volume = 1;
-        weaponManager.enabled = true;
+        isPaused = false;
+        
     }
 }

@@ -31,14 +31,17 @@ public class WeaponManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (playerAnimator.GetBool("isShooting"))
+        if (!GameManager.sharedInstance.isPaused && !GameManager.sharedInstance.isGameOver)
         {
-            playerAnimator.SetBool("isShooting", false);
-        }
-        if (Input.GetButtonDown("Fire1"))
-        {
-            //Debug.Log("Pium!");
-            Shoot();
+            if (playerAnimator.GetBool("isShooting"))
+            {
+                playerAnimator.SetBool("isShooting", false);
+            }
+            if (Input.GetButtonDown("Fire1"))
+            {
+                //Debug.Log("Pium!");
+                Shoot();
+            }
         }
     }
 
