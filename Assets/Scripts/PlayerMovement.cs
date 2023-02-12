@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -24,6 +25,9 @@ public class PlayerMovement : MonoBehaviour
     // Jump
     public float jumpHeight = 2f;
 
+    // Referència al PhotonView del FPS (quan està online)
+    public PhotonView photonView;
+
     void Start()
     {
 
@@ -31,6 +35,12 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        // Comprovam si estam online i si la referència de photonView, es d'un altre jugador...
+        if(PhotonNetwork.InRoom && !photonView.IsMine)
+        {
+            return;
+        }
+
         // Mirar si estic tocant el terra
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 

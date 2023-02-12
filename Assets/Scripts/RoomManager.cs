@@ -13,7 +13,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
         if (sharedInstance == null)
         {
             sharedInstance = this;
-            DontDestroyOnLoad(sharedInstance);
+            //Bug de indexboundexception
+            //DontDestroyOnLoad(sharedInstance);
         }
         else
         {
@@ -52,7 +53,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            Instantiate(Resources.Load("First_Person_Player"), spawnPos, Quaternion.identity);
+            Instantiate(Resources.Load("First_Person_Player"), spawnPos, Quaternion.identity) ;
         }
     }
 }

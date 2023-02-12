@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class MouseLook : MonoBehaviour
 {
@@ -11,6 +12,9 @@ public class MouseLook : MonoBehaviour
 
     private float xRotation;
 
+    // Referència al PhotonView del FPS (quan està online)
+    public PhotonView photonView;
+
     void Start()
     {
         // Limitar a que no sortiguem dels límits de la pantalla
@@ -19,6 +23,13 @@ public class MouseLook : MonoBehaviour
 
     void Update()
     {
+
+        // Comprovam si estam online i si la referència de photonView, es d'un altre jugador...
+        if (PhotonNetwork.InRoom && !photonView.IsMine)
+        {
+            return;
+        }
+
         float mouseX = Input.GetAxis("Mouse X") * mouseSensibility * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensibility * Time.deltaTime;
 

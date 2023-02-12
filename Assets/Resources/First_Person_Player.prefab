@@ -688,14 +688,14 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  enemyPrefab: {fileID: 6888894438561993582, guid: bcf3e3174a78b004fbd0b17e5c8c1bd7,
-    type: 3}
   roundText: {fileID: 4383254704635416057}
   roundsSurvivedText: {fileID: 4383254705555371307}
   gameOverPanel: {fileID: 4383254705258451396}
   pausePanel: {fileID: 4383254705172540256}
   fadePanelAnimator: {fileID: 4383254704314647555}
-  weaponManager: {fileID: 4648835627147397577}
+  isPaused: 0
+  isGameOver: 0
+  photonView: {fileID: 5258374558901612805}
 --- !u!1 &4383254704259487218
 GameObject:
   m_ObjectHideFlags: 0
@@ -2205,9 +2205,9 @@ Canvas:
   m_GameObject: {fileID: 4383254705462105623}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_RenderMode: 1
+  m_Camera: {fileID: 4383254704037308786}
+  m_PlaneDistance: 0.15
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -3129,6 +3129,8 @@ GameObject:
   - component: {fileID: 7251291693493235993}
   - component: {fileID: 2146593371023589842}
   - component: {fileID: 5698183133696247473}
+  - component: {fileID: 5865825080016131816}
+  - component: {fileID: 6839464184655138413}
   m_Layer: 0
   m_Name: FPS_Character
   m_TagString: Untagged
@@ -3188,6 +3190,44 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mouseSensibility: 500
   playerBody: {fileID: 6302713840184648183}
+  photonView: {fileID: 5258374558901612805}
+--- !u!114 &5865825080016131816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5698183133696247474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
+--- !u!114 &6839464184655138413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5698183133696247474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 2
+    Name: isShooting
+  m_SynchronizeLayers:
+  - SynchronizeType: 2
+    LayerIndex: 0
 --- !u!1 &6269811117505761333
 GameObject:
   m_ObjectHideFlags: 0
@@ -3202,6 +3242,7 @@ GameObject:
   - component: {fileID: 4383254704525649657}
   - component: {fileID: 4383254704073116619}
   - component: {fileID: 5258374558901612805}
+  - component: {fileID: 4874342340733920111}
   m_Layer: 0
   m_Name: First_Person_Player
   m_TagString: Player
@@ -3270,6 +3311,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   jumpHeight: 2
+  photonView: {fileID: 5258374558901612805}
 --- !u!114 &4383254704525649657
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3287,6 +3329,8 @@ MonoBehaviour:
   gameManager: {fileID: 4383254704204096885}
   playerCamera: {fileID: 4383254704037308788}
   hitPanel: {fileID: 4383254705977741258}
+  photonView: {fileID: 5258374558901612805}
+  activeWeapon: {fileID: 2484875096362233144}
 --- !u!135 &4383254704073116619
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3318,10 +3362,29 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 4874342340733920111}
+  - {fileID: 5865825080016131816}
+  - {fileID: 6839464184655138413}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &4874342340733920111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6269811117505761333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &6337080622362719383
 GameObject:
   m_ObjectHideFlags: 0
@@ -4053,7 +4116,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -4114,6 +4177,8 @@ MonoBehaviour:
     type: 3}
   shootClip: {fileID: 8300000, guid: 42dc462760399f045a6950b4c7474e7a, type: 3}
   weaponAudioSource: {fileID: 0}
+  photonView: {fileID: 5258374558901612805}
+  gameManager: {fileID: 4383254704204096885}
 --- !u!1001 &2747270082153570742
 PrefabInstance:
   m_ObjectHideFlags: 0

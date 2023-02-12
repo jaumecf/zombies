@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using Photon.Pun;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -25,6 +26,14 @@ public class PlayerManager : MonoBehaviour
 
     // Referència al component CanvasGroup del Hit Panel
     public CanvasGroup hitPanel;
+
+    // Referència al PhotonView del FPS (quan està online)
+    public PhotonView photonView;
+
+    // Active Weapon
+    public GameObject activeWeapon;
+
+
     void Start()
     {
         playerCameraOriginalRotation = playerCamera.transform.localRotation;
@@ -32,7 +41,15 @@ public class PlayerManager : MonoBehaviour
 
     void Update()
     {
-        if(hitPanel.alpha > 0)
+        // Comprovam si estam online i si la referència de photonView, es d'un altre jugador...
+        if (PhotonNetwork.InRoom && !photonView.IsMine)
+        {
+            // Aquí tampoc ens interessa agafar la càmera de un altre jugador
+            playerCamera.gameObject.SetActive(false);
+            return;
+        }
+
+        if (hitPanel.alpha > 0)
         {
             hitPanel.alpha -= Time.deltaTime;
         }
@@ -49,22 +66,43 @@ public class PlayerManager : MonoBehaviour
     // Declaram un mètode per a decrementar la vida del FPs
     public void hit(float damage)
     {
-        health -= damage;
-        healthText.text = $"{health} HP";
-        if(health <= 0)
-        {
-            //SceneManager.LoadScene(0);
-            gameManager.GameOver();
+        if(PhotonNetwork.InRoom){
+            photonView.RPC("PlayerTakeDamage", RpcTarget.All, damage, photonView.ViewID);
         }
         else
         {
-            shakeTime = 0;
-            hitPanel.alpha = 1;
+            PlayerTakeDamage(damage, photonView.ViewID);
+        }
+    }
+
+    [PunRPC]
+    public void PlayerTakeDamage(float damage,int viewId)
+    {
+        if(photonView.ViewID == viewId)
+        {
+            health -= damage;
+            healthText.text = $"{health} HP";
+            if (health <= 0)
+            {
+                //SceneManager.LoadScene(0);
+                gameManager.GameOver();
+            }
+            else
+            {
+                shakeTime = 0;
+                hitPanel.alpha = 1;
+            }
         }
     }
 
     public void CameraShake()
     {
         playerCamera.transform.localRotation = Quaternion.Euler(Random.Range(-2f, 2f), 0, 0);
+    }
+
+    [PunRPC]
+    public void WeaponShootSFX(int viewID)
+    {
+        activeWeapon.GetComponent<WeaponManager>().ShootVFX(viewID);
     }
 }

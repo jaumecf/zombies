@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class WeaponManager : MonoBehaviour
 {
@@ -23,6 +24,12 @@ public class WeaponManager : MonoBehaviour
     public AudioClip shootClip;
     public AudioSource weaponAudioSource;
 
+    // Referència al PhotonView del FPS (quan està online)
+    public PhotonView photonView;
+
+    // Referència al GameManager pel multijugador
+    public GameManager gameManager;
+
     void Start()
     {
         weaponAudioSource = GetComponent<AudioSource>();
@@ -31,7 +38,14 @@ public class WeaponManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!GameManager.sharedInstance.isPaused && !GameManager.sharedInstance.isGameOver)
+
+        // Comprovam si estam online i si la referència de photonView, es d'un altre jugador...
+        if (PhotonNetwork.InRoom && !photonView.IsMine)
+        {
+            return;
+        }
+
+        if (!gameManager.isPaused && !gameManager.isGameOver)
         {
             if (playerAnimator.GetBool("isShooting"))
             {
@@ -44,13 +58,29 @@ public class WeaponManager : MonoBehaviour
             }
         }
     }
+    public void ShootVFX(int viewID)
+    {
+        if (photonView.ViewID == viewID)
+        {
+            flashParticleSystem.Play();
+            weaponAudioSource.PlayOneShot(shootClip, 1f);
+        }
+    }
 
     private void Shoot()
     {
-        playerAnimator.SetBool("isShooting", true);
-        flashParticleSystem.Play();
-        weaponAudioSource.PlayOneShot(shootClip, 0.75f);
+        if (PhotonNetwork.InRoom)
+        {
+            // Els RPC només cerquen a la mateixa altura del pare, i no als fills
+            // el sistema de partícules es fill de l'arma i no ho trobaria...
+            photonView.RPC("WeaponShootSFX", RpcTarget.All, photonView.ViewID);
+        }
+        else
+        {
+            ShootVFX(photonView.ViewID);
+        }
 
+        playerAnimator.SetBool("isShooting", true);
         RaycastHit hit;
         if (Physics.Raycast(playerCam.transform.position, transform.forward, out hit, range))
         {
@@ -67,6 +97,5 @@ public class WeaponManager : MonoBehaviour
                 // Recordau que aquesta animació te seleccionat per Stop Action: "Destroy" ja que sinó es crearien infinites instàncies
             }
         }
-
     }
 }

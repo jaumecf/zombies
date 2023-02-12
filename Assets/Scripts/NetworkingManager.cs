@@ -74,6 +74,6 @@ public class NetworkingManager : MonoBehaviourPunCallbacks
         //SceneManager.LoadScene(2);
         // Ara ja no carregar l'escena en local per aquest client,
         // sinò que carregam la nova escena des del Photon Network
-        PhotonNetwork.LoadLevel(2);
+        PhotonNetwork.LoadLevel(1);
     }
 }

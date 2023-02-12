@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
+using Photon.Pun;
 
 public class EnemyManager : MonoBehaviour
 {
@@ -33,8 +34,14 @@ public class EnemyManager : MonoBehaviour
     // So
     public AudioSource enemyAudioSource;
     public AudioClip[] growlAudioClips;
+
+    // Array de jugador, ja que amb el multiplayer sinò, només persegueixen al master
+    private GameObject[] playersInScene;
+
+    public PhotonView photonView;
     void Start()
     {
+        playersInScene = GameObject.FindGameObjectsWithTag("Player");
         // Aquest cop, no arrossegarem la variable GameObject del FPS
         // des de l'inspector, sinò que l'assginarem des del codi
         // En concret volem cercar al jugador principal!!
@@ -47,12 +54,29 @@ public class EnemyManager : MonoBehaviour
     
     void Update()
     {
-        // Accedim al component NavMeshComponent, el qual té un element que es destination de tipus Vector3
-        // Li podem assignar la posició del jugador, que el tenim a la variable player gràcies al seu tranform
-        GetComponent<NavMeshAgent>().destination = player.transform.position;
 
-        // D'aquesta forma ens asseguram que malgrat el Zombie estigues de costat, veurem de front la barra de vida
-        healthBar.transform.LookAt(player.transform);
+        if (!enemyAudioSource.isPlaying)
+        {
+            enemyAudioSource.clip = growlAudioClips[Random.Range(0, growlAudioClips.Length)];
+            enemyAudioSource.Play();
+        }
+
+        // Tota la lògica següent no l'executarem si no som el master client
+        if(PhotonNetwork.InRoom && !PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
+        // Cercam el jugador més proper...
+        GetClosestPlayer();
+        if(player != null)
+        {
+            // Accedim al component NavMeshComponent, el qual té un element que es destination de tipus Vector3
+            // Li podem assignar la posició del jugador, que el tenim a la variable player gràcies al seu tranform
+            GetComponent<NavMeshAgent>().destination = player.transform.position;
+
+            // D'aquesta forma ens asseguram que malgrat el Zombie estigues de costat, veurem de front la barra de vida
+            healthBar.transform.LookAt(player.transform);
+        }
 
         // En primer lloc hem d'accedir a la velocitat del Zombiem, des del component NavMeshAgent
         if (GetComponent<NavMeshAgent>().velocity.magnitude > 1)
@@ -63,13 +87,6 @@ public class EnemyManager : MonoBehaviour
         {
             enemyAnimator.SetBool("isRunning", false);
         }
-
-        if (!enemyAudioSource.isPlaying)
-        {
-            enemyAudioSource.clip = growlAudioClips[Random.Range(0, growlAudioClips.Length)];
-            enemyAudioSource.Play();
-        }
-        
 
     }
 
@@ -113,27 +130,63 @@ public class EnemyManager : MonoBehaviour
 
     public void Hit(float damage)
     {
-        health -= damage;
-        healthBar.value = health;
-        if(health <= 0)
+        // Cridada a RPC per a sincronitzar entre els diferents clients
+        if (PhotonNetwork.InRoom)
         {
-            // Animarem el zombie
-            enemyAnimator.SetTrigger("isDead");
+            photonView.RPC("TakeDamage", RpcTarget.All, damage, photonView.ViewID);
+        }
+        else
+        {
+            TakeDamage(damage, photonView.ViewID);
+        }
+    }
 
-            // Destrium a l'enemic quan la seva salut arriba a zero
-            // feim referència a ell amb la variable gameObject, que fa referència al GO
-            // que conté el componentn EnemyManager
-            //Destroy(gameObject);
-            Destroy(gameObject,10f);
-            Destroy(GetComponent<NavMeshAgent>());
-            Destroy(GetComponent<EnemyManager>());
-            Destroy(GetComponent<CapsuleCollider>());
+    [PunRPC]
+    public void TakeDamage(float damage, int viewID)
+    {
+        if(photonView.ViewID == viewID)
+        {
+            health -= damage;
+            healthBar.value = health;
+            if (health <= 0)
+            {
+                // Animarem el zombie
+                enemyAnimator.SetTrigger("isDead");
 
+                // Destrium a l'enemic quan la seva salut arriba a zero
+                // feim referència a ell amb la variable gameObject, que fa referència al GO
+                // que conté el componentn EnemyManager
+                //Destroy(gameObject);
+                Destroy(gameObject, 10f);
+                Destroy(GetComponent<NavMeshAgent>());
+                Destroy(GetComponent<EnemyManager>());
+                Destroy(GetComponent<CapsuleCollider>());
 
-            //TODO : decrementar comptador enemiesAlive
-            gameManager.enemiesAlive--;
+                if(!PhotonNetwork.InRoom || (PhotonNetwork.IsMasterClient && photonView.IsMine))
+                {
+                    //TODO : decrementar comptador enemiesAlive
+                    gameManager.enemiesAlive--;
+                }
+            }
+        }
+    }
 
-            
+    private void GetClosestPlayer()
+    {
+        float minDistance = Mathf.Infinity;
+        Vector3 currentPosition = transform.position;
+
+        foreach(GameObject p in playersInScene)
+        {
+            if (p != null)
+            {
+                float distance = Vector3.Distance(p.transform.position,currentPosition);
+                if (distance < minDistance)
+                {
+                    player = p;
+                    minDistance = distance;
+                }
+            }
         }
     }
 }
