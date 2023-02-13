@@ -14,15 +14,22 @@ public class NetworkingManager : MonoBehaviourPunCallbacks
     void Start()
     {
         Debug.Log("Connexió a un servidor");
-
+        if (PhotonNetwork.IsConnected)
+        {
+            StartCoroutine(DisconnectPlayer());
+        }
         // Connexió amb el servidor
         PhotonNetwork.ConnectUsingSettings();
+        // Sincronitzar escenes del master amb tots els clients
+        PhotonNetwork.AutomaticallySyncScene = true;
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator DisconnectPlayer()
     {
-        
+        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.Disconnect();
+        while (PhotonNetwork.IsConnected)
+            yield return null;
     }
 
     public override void OnConnectedToMaster()
@@ -38,6 +45,8 @@ public class NetworkingManager : MonoBehaviourPunCallbacks
         multiplayerButton.interactable = true;
         //base.OnJoinedLobby();
     }
+
+    // Connexió a una sala!
 
     public void FindMatch()
     {
@@ -74,6 +83,12 @@ public class NetworkingManager : MonoBehaviourPunCallbacks
         //SceneManager.LoadScene(2);
         // Ara ja no carregar l'escena en local per aquest client,
         // sinò que carregam la nova escena des del Photon Network
-        PhotonNetwork.LoadLevel(1);
+        PhotonNetwork.LoadLevel(2);
+    }
+
+    public void LoadMainMenu()
+    {
+        PhotonNetwork.Disconnect();
+        SceneManager.LoadScene(0);
     }
 }

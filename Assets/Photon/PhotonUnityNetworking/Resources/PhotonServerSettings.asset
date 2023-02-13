@@ -41,6 +41,8 @@ MonoBehaviour:
   - RespawnSpaceship
   - TakeDamege
   - WeaponShootSFX
+  - TakeDamage
+  - PlayerTakeDamage
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

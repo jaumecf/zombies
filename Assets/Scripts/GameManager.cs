@@ -60,6 +60,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         isPaused = false;
         isGameOver = false;
         Time.timeScale = 1;
+        AudioListener.volume = 1;
 
         // Inicialitzam els swapn points
         spawnPoints = GameObject.FindGameObjectsWithTag("Spawners");
@@ -141,35 +142,45 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void RestartGame()
     {
-        // Recordau que carregam l'escena amb index 0, que es troba a File > Build Settings
-        // Després el modificam per 1
-        SceneManager.LoadScene(1);
-        //Retornar l'escala de temps al valor original
         if (!PhotonNetwork.InRoom)
         {
-            // Aturar el temps si no estam online
+            // Tornam a temps a la normalitat si no estam online
             Time.timeScale = 1;
+            SceneManager.LoadScene(2);
+        }
+        else
+        {
+            PhotonNetwork.LoadLevel(1);
         }
     }
 
     public void BackMainMenu()
     {
-        /* bug
-        if (!PhotonNetwork.InRoom)
-        {
-            // Aturar el temps si no estam online
-            Time.timeScale = 1;
-        }*/
-        AudioListener.volume = 1;
         fadePanelAnimator.SetTrigger("fadeIn");
+        // TODO: Afegir un wait per a l'animació.
+
         // Per a que doni temps a veure l'animació, canviarem d'escena amb una mica de delay
         Invoke("LoadMainMenuScene", 0.5f);
+        if (!PhotonNetwork.InRoom)
+        {
+            // Tornam a temps a la normalitat si no estam online
+            Time.timeScale = 1;
+        }
+        //AudioListener.volume = 1;
         //SceneManager.LoadScene(0);
     }
 
     public void LoadMainMenuScene()
     {
-        SceneManager.LoadScene(0);
+        // Hem de mirar si estam online o no
+        if (!PhotonNetwork.InRoom)
+        {
+            SceneManager.LoadScene(0);
+        }
+        else
+        {
+            PhotonNetwork.LoadLevel(1);
+        }
     }
 
     public void Pause()

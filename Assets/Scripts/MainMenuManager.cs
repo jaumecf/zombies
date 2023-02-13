@@ -7,12 +7,17 @@ public class MainMenuManager : MonoBehaviour
 {
     public void StartGame()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2);
     }
 
     public void ExitGame()
     {
         Application.Quit();
         Debug.Log("Quit!");
+    }
+
+    public void LoadMultiplayerMenu()
+    {
+        SceneManager.LoadScene(1);
     }
 }
