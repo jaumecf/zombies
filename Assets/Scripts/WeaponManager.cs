@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
+using ExitGames.Client.Photon;
 
-public class WeaponManager : MonoBehaviour
+public class WeaponManager : MonoBehaviour, IOnEventCallback
 {
 
     // Variable per emmagatzemar el GO de la càmera i el rang de l'arma
@@ -29,6 +31,9 @@ public class WeaponManager : MonoBehaviour
 
     // Referència al GameManager pel multijugador
     public GameManager gameManager;
+
+    // Codi per al Raise Event
+    private const byte VFX_EVENT = 0;
 
     void Start()
     {
@@ -58,6 +63,7 @@ public class WeaponManager : MonoBehaviour
             }
         }
     }
+
     public void ShootVFX(int viewID)
     {
         if (photonView.ViewID == viewID)
@@ -73,7 +79,14 @@ public class WeaponManager : MonoBehaviour
         {
             // Els RPC només cerquen a la mateixa altura del pare, i no als fills
             // el sistema de partícules es fill de l'arma i no ho trobaria...
-            photonView.RPC("WeaponShootSFX", RpcTarget.All, photonView.ViewID);
+            int viewID = photonView.ViewID;
+
+            RaiseEventOptions raiseOptions = new RaiseEventOptions{ Receivers = ReceiverGroup.All };
+            SendOptions sendOptions = new SendOptions { Reliability = true };
+
+            PhotonNetwork.RaiseEvent(VFX_EVENT, viewID, raiseOptions, sendOptions);
+            //Ara ja no necessitam cridar un RPC per a que els demés jugador vegin els VFX
+            //photonView.RPC("WeaponShootSFX", RpcTarget.All, photonView.ViewID);
         }
         else
         {
@@ -97,5 +110,25 @@ public class WeaponManager : MonoBehaviour
                 // Recordau que aquesta animació te seleccionat per Stop Action: "Destroy" ja que sinó es crearien infinites instàncies
             }
         }
+    }
+
+    void IOnEventCallback.OnEvent(EventData photonEvent)
+    {
+        if (photonEvent.Code == VFX_EVENT)
+        {
+            Debug.Log("EventReceived");
+            int viewID = (int)photonEvent.CustomData;
+            ShootVFX(viewID);
+        }
+    }
+
+    private void OnEnable()
+    {
+        PhotonNetwork.AddCallbackTarget(this);
+    }
+
+    private void OnDisable()
+    {
+        PhotonNetwork.RemoveCallbackTarget(this);
     }
 }
