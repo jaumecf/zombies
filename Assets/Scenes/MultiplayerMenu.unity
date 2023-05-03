@@ -1556,7 +1556,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1414554724}
         m_TargetAssemblyTypeName: NetworkingManager, Assembly-CSharp
-        m_MethodName: FindMatch
+        m_MethodName: LoadMPGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1965,7 +1965,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 22.167713}
+  m_AnchoredPosition: {x: 0, y: 0.00029707086}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &751867365
@@ -2028,7 +2028,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 22.167713}
+  m_AnchoredPosition: {x: 0, y: 0.00029707086}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &856128949
@@ -2656,7 +2656,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 600, y: -55}
+  m_AnchoredPosition: {x: 600, y: -25}
   m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1034036430
@@ -3480,7 +3480,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1541115177}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.90645754
+  m_Size: 0.9999977
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3709,11 +3709,15 @@ MonoBehaviour:
   roomOptionsPanel: {fileID: 1759554300}
   playersListPanel: {fileID: 1163097966}
   multiplayerButton: {fileID: 484496744}
+  leaveRoom: {fileID: 509953566}
   roomNameInput: {fileID: 977853927}
   roomItemPrefab: {fileID: -9081456056616380688, guid: 94ac3364668c7a74d9f6c028171699a0,
     type: 3}
   roomList: []
-  contentObject: {fileID: 751867364}
+  contentRooms: {fileID: 751867364}
+  playerItemPrefab: {fileID: 5784707752628900226, guid: 8f63ae2d9f9fc5740a3f63bda528e665,
+    type: 3}
+  contentPlayers: {fileID: 856128948}
 --- !u!1 &1496009344
 GameObject:
   m_ObjectHideFlags: 0
@@ -3798,7 +3802,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 213661122}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.90645754
+  m_Size: 0.9999977
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

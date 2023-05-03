@@ -21,5 +21,6 @@ public class RoomItem : MonoBehaviour
     public void OnClickItem()
     {
         networkingManager.JoinRoom(roomName.text);
+        Debug.Log("Unit a la sala des de RoomItem");
     }
 }

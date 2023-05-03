@@ -16,16 +16,21 @@ public class NetworkingManager : MonoBehaviourPunCallbacks
     public GameObject playersListPanel;
 
     public Button multiplayerButton;
+    public Button leaveRoom;
 
     public TMP_InputField roomNameInput;
     public RoomItem roomItemPrefab;
     public List<RoomItem> roomList = new List<RoomItem>();
-    public Transform contentObject;
+    public Transform contentRooms;
+
+    public TMP_Text playerItemPrefab;
+    public Transform contentPlayers;
     
     void Start()
     {
         roomOptionsPanel.SetActive(false);
         playersListPanel.SetActive(false);
+        leaveRoom.interactable = false;
         if (PhotonNetwork.IsConnected)
         {
             StartCoroutine(DisconnectPlayer());
@@ -77,6 +82,8 @@ public class NetworkingManager : MonoBehaviourPunCallbacks
         {
             MakeRoom(roomNameInput.text);
         }
+        // Esborram el contingut
+        roomNameInput.text = "";
     }
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
@@ -86,7 +93,7 @@ public class NetworkingManager : MonoBehaviourPunCallbacks
     {
         foreach (RoomItem item in roomList)
         {
-            Destroy(item.gameObject);
+            DestroyImmediate(item.gameObject);
         }
         roomList.Clear();
     }
@@ -96,8 +103,8 @@ public class NetworkingManager : MonoBehaviourPunCallbacks
         ClearRoomList();
         foreach (RoomInfo room in list)
         {
-            RoomItem newRoom = Instantiate(roomItemPrefab, contentObject);
-            newRoom.SetRoomName(room.Name);
+            RoomItem newRoom = Instantiate(roomItemPrefab, contentRooms);
+            newRoom.SetRoomName(room.Name+room.PlayerCount+"/6");
             roomList.Add(newRoom);
         }
     }
@@ -134,19 +141,25 @@ public class NetworkingManager : MonoBehaviourPunCallbacks
 
     public void JoinRoom(string roomName)
     {
+        Debug.Log("Joined Room");
         PhotonNetwork.JoinRoom(roomName);
     }
 
     public void OnClickLeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
+        //TODO: Eliminar room que hem creat de la lliusta (ens apareix buida)
         ClearRoomList();
+        playersListPanel.SetActive(false);
+        leaveRoom.interactable = false;
     }
     public override void OnJoinedRoom()
     {
+        leaveRoom.interactable = true;
         ClearRoomList();
         statusText.text = $"On room: {PhotonNetwork.CurrentRoom.Name}";
         playersListPanel.SetActive(true);
+        UpdatePlayerList();
 
         //Debug.Log("Carregant escena del joc");
         // Cream una nova escena, còpia de Game, i li deim "Game Online" amb codi d'escena 2
@@ -154,6 +167,32 @@ public class NetworkingManager : MonoBehaviourPunCallbacks
         // Ara ja no carregar l'escena en local per aquest client,
         // sinò que carregam la nova escena des del Photon Network
         //PhotonNetwork.LoadLevel(2);
+        multiplayerButton.interactable = true;
+    }
+    
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        UpdatePlayerList();
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        UpdatePlayerList();
+    }
+
+    public void UpdatePlayerList()
+    {
+        //TODO: clear and update List
+        foreach (Player p in PhotonNetwork.PlayerList)
+        {
+            TMP_Text newPlayer = Instantiate(playerItemPrefab, contentPlayers);
+            newPlayer.text = p.NickName;
+        }
+    }
+
+    public void LoadMPGame()
+    {
+        PhotonNetwork.LoadLevel(2);
     }
 
     public void LoadMainMenu()
