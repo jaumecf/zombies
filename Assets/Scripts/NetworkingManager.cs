@@ -101,10 +101,11 @@ public class NetworkingManager : MonoBehaviourPunCallbacks
     private void UpdateRoomList(List<RoomInfo> list)
     {
         ClearRoomList();
+        Debug.Log("Llista: "+list.Count);
         foreach (RoomInfo room in list)
         {
             RoomItem newRoom = Instantiate(roomItemPrefab, contentRooms);
-            newRoom.SetRoomName(room.Name+room.PlayerCount+"/6");
+            newRoom.SetRoomName(room);
             roomList.Add(newRoom);
         }
     }
@@ -160,6 +161,7 @@ public class NetworkingManager : MonoBehaviourPunCallbacks
         statusText.text = $"On room: {PhotonNetwork.CurrentRoom.Name}";
         playersListPanel.SetActive(true);
         UpdatePlayerList();
+        Debug.Log("Estam apunt per jugar!"+PhotonNetwork.CurrentRoom.PlayerCount);
 
         //Debug.Log("Carregant escena del joc");
         // Cream una nova escena, còpia de Game, i li deim "Game Online" amb codi d'escena 2
