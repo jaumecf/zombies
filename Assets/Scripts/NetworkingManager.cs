@@ -21,6 +21,7 @@ public class NetworkingManager : MonoBehaviourPunCallbacks
     public TMP_InputField roomNameInput;
     public RoomItem roomItemPrefab;
     public List<RoomItem> roomList = new List<RoomItem>();
+    public List<TMP_Text> playersList = new List<TMP_Text>();
     public Transform contentRooms;
 
     public TMP_Text playerItemPrefab;
@@ -184,12 +185,22 @@ public class NetworkingManager : MonoBehaviourPunCallbacks
 
     public void UpdatePlayerList()
     {
-        //TODO: clear and update List
+        ClearPlayerList();
         foreach (Player p in PhotonNetwork.PlayerList)
         {
             TMP_Text newPlayer = Instantiate(playerItemPrefab, contentPlayers);
             newPlayer.text = p.NickName;
+            playersList.Add(newPlayer);
         }
+    }
+    
+    private void ClearPlayerList()
+    {
+        foreach (TMP_Text item in playersList)
+        {
+            DestroyImmediate(item.gameObject);
+        }
+        playersList.Clear();
     }
 
     public void LoadMPGame()

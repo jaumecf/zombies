@@ -41,14 +41,17 @@ public class EnemyManager : MonoBehaviour
     public PhotonView photonView;
     void Start()
     {
-        playersInScene = GameObject.FindGameObjectsWithTag("Player");
         // Aquest cop, no arrossegarem la variable GameObject del FPS
         // des de l'inspector, sinò que l'assginarem des del codi
         // En concret volem cercar al jugador principal!!
-        player = GameObject.FindGameObjectWithTag("Player");
         healthBar.maxValue = health;
         healthBar.value = health;
         enemyAudioSource = GetComponent<AudioSource>();
+        // Iniciem la cerca optimitzada només si som el Master Client
+        if (PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine(UpdatePlayersListRoutine());
+        }
     }
 
     
@@ -66,26 +69,18 @@ public class EnemyManager : MonoBehaviour
         {
             return;
         }
-        // Cercam el jugador més proper...
-        GetClosestPlayer();
         if(player != null)
         {
             // Accedim al component NavMeshComponent, el qual té un element que es destination de tipus Vector3
             // Li podem assignar la posició del jugador, que el tenim a la variable player gràcies al seu tranform
-            GetComponent<NavMeshAgent>().destination = player.transform.position;
+            NavMeshAgent agent = GetComponent<NavMeshAgent>();
+            agent.destination = player.transform.position;
 
+            // Animació basada en la velocitat real de l'agent
+            enemyAnimator.SetBool("isRunning", agent.velocity.magnitude > 0.1f);
+            
             // D'aquesta forma ens asseguram que malgrat el Zombie estigues de costat, veurem de front la barra de vida
             healthBar.transform.LookAt(player.transform);
-        }
-
-        // En primer lloc hem d'accedir a la velocitat del Zombiem, des del component NavMeshAgent
-        if (GetComponent<NavMeshAgent>().velocity.magnitude > 1)
-        {
-            enemyAnimator.SetBool("isRunning", true);
-        }
-        else
-        {
-            enemyAnimator.SetBool("isRunning", false);
         }
 
     }
@@ -170,23 +165,43 @@ public class EnemyManager : MonoBehaviour
             }
         }
     }
-
-    private void GetClosestPlayer()
+    
+    IEnumerator UpdatePlayersListRoutine()
     {
-        float minDistance = Mathf.Infinity;
-        Vector3 currentPosition = transform.position;
-
-        foreach(GameObject p in playersInScene)
+        while (true)
         {
-            if (p != null)
+            // 1. Busquem tots els PhotonViews de l'escena
+            PhotonView[] allViews = GameObject.FindObjectsOfType<PhotonView>();
+            List<GameObject> tempPlayerList = new List<GameObject>();
+
+            foreach (PhotonView view in allViews)
             {
-                float distance = Vector3.Distance(p.transform.position,currentPosition);
-                if (distance < minDistance)
+                // 2. Si el PhotonView té el tag Player i és un personatge controlat per algú
+                if (view.gameObject.CompareTag("Player"))
                 {
-                    player = p;
-                    minDistance = distance;
+                    tempPlayerList.Add(view.gameObject);
                 }
             }
+
+            // 3. Busquem el més proper d'aquesta llista
+            float minDistance = Mathf.Infinity;
+            GameObject targetTemp = null;
+
+            foreach (GameObject p in tempPlayerList)
+            {
+                if (p != null)
+                {
+                    float distance = Vector3.Distance(p.transform.position, transform.position);
+                    if (distance < minDistance)
+                    {
+                        minDistance = distance;
+                        targetTemp = p;
+                    }
+                }
+            }
+
+            player = targetTemp;
+            yield return new WaitForSeconds(0.5f);
         }
     }
 }
